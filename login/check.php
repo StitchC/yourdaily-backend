@@ -33,7 +33,7 @@
 
 	}else {
 		while($arr = mysql_fetch_array($result)) {
-			$info = array('id'=>$arr[id], 'sex'=>$arr[sex]);
+			$info = array('id'=>$arr[id], 'sex'=>$arr[sex], 'connect'=>$arr[connect]);
 		}
 		$result_str = array('status'=>200, 'info'=>$info);
 		echo json_encode($result_str);
