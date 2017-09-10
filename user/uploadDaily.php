@@ -8,7 +8,7 @@
 	$content = $_POST[content];
 	$mood = $_POST[mood];
 	$weather = $_POST[weather];
-	$time = time();
+	$time = date("Y-m-d H:i:s");
 
 	$status = array();
 

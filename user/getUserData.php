@@ -21,35 +21,47 @@
 	mysql_select_db('yourdaily',$link);
 
 	// 获取全部日记
-	$research_daily_sql = "select daily.id, daily.title, daily.content, daily.mood, daily.weather,daily.publicTime, user.id, user.sex from user, daily where daily.userId = '$id' or daily.userId = '$connect'";
+	if($connect) {
+		$all_daily_sql = "select daily.id,daily.userid,daily.title,daily.content,daily.mood,daily.weather,daily.publictime,user.sex from daily,user where user.id = '$id' or user.id = '$connect' order by publictime desc";
+	}else {
+		$all_daily_sql = "select daily.id,daily.userid,daily.title,daily.content,daily.mood,daily.weather,daily.publictime,user.sex from daily,user where user.id = '$id' order by publictime desc";
+	}
+	
 
 	// 获取所有日记的数量
-	$daily_count_sql = "select count(*) from daily where userId = '$id'";
+	$daily_count_sql = "select count(*) as count from daily where userid = '$id'";
 
 	// 获取用户信息
-	$get_user_info = "select avatar, motto, username from user where id = '$id'";
+	$get_user_info_sql = "select username,avatar,sex,motto,connect from user where id = '$id'";
 	
 
-	$daily_result = mysql_query($research_daily_sql);
-	$daily_count = mysql_query($daily_count_sql);
-	$user_info = mysql_query($get_user_info);
+	$daily_result = mysql_query($all_daily_sql, $link);
+	$daily_count = mysql_query($daily_count_sql, $link);
+	$user_info = mysql_query($get_user_info_sql, $link);
 
-	while ($rows = mysql_fetch_array($daily_result)) {
-		$temp = array('id' => $rows[id], 'userId' => $rows[userId], 'title' => $rows[title], 'content' => $rows[content], 'mood' => $rows[mood], 'weather' => $rows[weather], 'publicTime' => $rows[publicTime]);
+	
+	while ($row = mysql_fetch_array($daily_result)) {
+		
+		$temp = array('userId' => $row[userid], 'title' => $row[title], 'content' => $row[content], 'mood' => $row[mood], 'weather' => $row[weather], 'sex' => $row[sex], 'publicTime' => $row[publictime]);
 
-		$total_words += mb_strlen($rows[content], "utf-8");
-
-		$daily[] = $temp;
+		$total_words += mb_strlen($row[content], "utf-8");
+		
+		$daily[$row[id]] = $temp;
 	}
+	
+	$info_result = mysql_fetch_array($user_info);
+	$daily_count_result = mysql_fetch_array($daily_count);
 
-	while($infoItem = mysql_fetch_array($user_info)) {
-		$info = array('username' => $infoItem[username], 'avatar' => $infoItem[avatar], 'sex' => $infoItem[sex], 'motto' => $infoItem[motto], 'connect' => $infoItem[connect], 'totalWords' => $total_words);
-	}
+	$info = array('username' => $info_result[username], 'avatar' => $info_result[avatar], 'sex' => $info_result[sex], 'motto' => $info_result[motto], 'connect' => $info_result[connect], 'count' => $daily_count_result[count], 'words' => $total_words);
 
-	$resultArr = array('daily' => $daily, 'userInfo' => $info);
+
+
+
+
+	$resultArr = array('daily' => $daily, 'info' => $info);
 
 	echo json_encode($resultArr);
-	
+
 
 	
 ?>
