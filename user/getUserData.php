@@ -22,11 +22,12 @@
 
 	// 获取全部日记
 	if($connect) {
-		$all_daily_sql = "select daily.id,daily.userid,daily.title,daily.content,daily.mood,daily.weather,daily.publictime,user.sex from daily,user where user.id = '$id' or user.id = '$connect' order by publictime desc";
+		$all_daily_sql = "select daily.id,daily.userid,title,content,mood, weather,publictime,user.sex from daily join user on daily.userid = user.id where daily.userid = '$id' or daily.userid = '$connect' order by daily.publictime desc";
 	}else {
-		$all_daily_sql = "select daily.id,daily.userid,daily.title,daily.content,daily.mood,daily.weather,daily.publictime,user.sex from daily,user where user.id = '$id' order by publictime desc";
+		$all_daily_sql = "select daily.id,daily.userid,title,content,mood, weather,publictime,user.sex from daily join user on daily.userid = user.id where daily.userid = '$id' order by daily.publictime desc";
 	}
-	
+
+	// 
 
 	// 获取所有日记的数量
 	$daily_count_sql = "select count(*) as count from daily where userid = '$id'";
@@ -42,7 +43,7 @@
 	
 	while ($row = mysql_fetch_array($daily_result)) {
 		
-		$temp = array('userId' => $row[userid], 'title' => $row[title], 'content' => $row[content], 'mood' => $row[mood], 'weather' => $row[weather], 'sex' => $row[sex], 'publicTime' => $row[publictime]);
+		$temp = array('id' => $row[id], 'userId' => $row[userid], 'title' => $row[title], 'content' => $row[content], 'mood' => $row[mood], 'weather' => $row[weather], 'sex' => $row[sex], 'publicTime' => $row[publictime]);
 
 		$total_words += mb_strlen($row[content], "utf-8");
 		
