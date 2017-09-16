@@ -33,7 +33,7 @@
 	$daily_count_sql = "select count(*) as count from daily where userid = '$id'";
 
 	// 获取用户信息
-	$get_user_info_sql = "select username,avatar,sex,motto,connect from user where id = '$id'";
+	$get_user_info_sql = "select username, id, avatar,sex,motto,connect from user where id = '$id'";
 	
 
 	$daily_result = mysql_query($all_daily_sql, $link);
@@ -53,9 +53,7 @@
 	$info_result = mysql_fetch_array($user_info);
 	$daily_count_result = mysql_fetch_array($daily_count);
 
-	$info = array('username' => $info_result[username], 'avatar' => $info_result[avatar], 'sex' => $info_result[sex], 'motto' => $info_result[motto], 'connect' => $info_result[connect], 'count' => $daily_count_result[count], 'words' => $total_words);
-
-
+	$info = array('id' => $info_result[id], 'username' => $info_result[username], 'avatar' => $info_result[avatar], 'sex' => $info_result[sex], 'motto' => $info_result[motto], 'connect' => $info_result[connect], 'count' => $daily_count_result[count], 'words' => $total_words);
 
 
 
