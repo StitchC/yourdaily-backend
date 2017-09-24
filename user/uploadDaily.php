@@ -1,6 +1,8 @@
 <?php 
 	header('content-type:application:json;charset=utf8');  
 	header('Access-Control-Allow-Origin:http://localhost:8080');
+	date_default_timezone_set("PRC");
+	date_default_timezone_set("Asia/Shanghai"); 
 
 	$id = $_POST[id];
 	$dailyId = md5(uniqid());
