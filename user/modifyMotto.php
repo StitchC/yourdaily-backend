@@ -9,7 +9,7 @@
 
 	mysql_select_db('yourdaily',$link);
 
-	$sql = "update user set motto='$motto' where id='$id'";
+	$sql = "update user set motto = '$motto' where id = '$id'";
 
 	$result = mysql_query($sql);
 
