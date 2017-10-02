@@ -11,27 +11,55 @@
 	$mood = $_POST[mood];
 	$weather = $_POST[weather];
 	$time = date("Y-m-d H:i:s");
+	$file = $_FILES[file];
 
+	
 	$status = array();
+	$filePathArr = array();
 
 	$link = mysql_connect('localhost','root','123456');
 
 	mysql_select_db('yourdaily',$link);
 
-	if($title == '') {
-		$sql = "insert into daily(id,userId,content,mood,weather,publicTime)values ('$dailyId','$id','$content','$mood','$weather','$time')";
+	// 先判断有没有文件
+	if($file) {
+		for ($i=0; $i < count($file); $i++) {
+			if($file['name'][$i]) {
+				$arr[] = $file['name'][$i];
+				move_uploaded_file($file['tmp_name'][$i], "../../dailyPhoto/" . $dailyId . $i . ".jpg");
+				array_push($filePathArr, "/yourdaily/dailyPhoto/" . $dailyId . $i . ".jpg");
+			}
+		};
+
+		if($title == '') {
+			$imgPath_str = implode(",", $filePathArr);
+			$sql = "insert into daily(id,userId,content,image,mood,weather,publicTime)values ('$dailyId','$id','$content','$imgPath_str','$mood','$weather','$time')";
+		}else {
+			$imgPath_str = implode(",", $filePathArr);
+			$sql = "insert into daily(id,userId,title,content,image,mood,weather,publicTime)values ('$dailyId','$id','$title','$content','$imgPath_str','$mood','$weather','$time')";
+		}
 	}else {
-		$sql = "insert into daily(id,userId,title,content,mood,weather,publicTime)values ('$dailyId','$id','$title','$content','$mood','$weather','$time')";
+		if($title == '') {
+			$imgPath_str = implode(",", $filePathArr);
+			$sql = "insert into daily(id,userId,content,mood,weather,publicTime)values ('$dailyId','$id','$content','$mood','$weather','$time')";
+		}else {
+			$imgPath_str = implode(",", $filePathArr);
+			$sql = "insert into daily(id,userId,title,content,mood,weather,publicTime)values ('$dailyId','$id','$title','$content','$mood','$weather','$time')";
+		}
 	}
+
 
 	$result = mysql_query($sql,$link);
 
 	if($result) {
-		$status = array('status' => 200, 'info' => '', 'time' => $time);
+		$status = array('status' => 200, 'info' => '');
 	}else {
-		$status = array('status' => 400, 'info' => '', 'time' => $time);
+		$status = array('status' => 400, 'info' => '');
 	}
 
+
 	echo json_encode($status);
+	
+
 
 ?>
