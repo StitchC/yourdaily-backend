@@ -12,7 +12,7 @@
 
 
 	$total_words = 0;     // 保存所有日记的总字数
-	$total_img = 0;       // 保存所有图片的数量
+	$total_img = array(); // 保存所有图片的数量
  
 
 
@@ -49,7 +49,11 @@
 		$total_words += mb_strlen($row[content], "utf-8");
 		
 		if($row[image] != '') {
-			$total_img += count(explode(",", $row[image]));
+			$temp_img_list = explode(",", $row[image]);
+			for ($i=0; $i < count($temp_img_list); $i++) { 
+				array_push($total_img, $temp_img_list[$i]);
+			}
+			
 		}
 		
 		$daily[$row[id]] = $temp;
