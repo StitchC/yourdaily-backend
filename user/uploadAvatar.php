@@ -12,31 +12,40 @@
 	$link = mysql_connect('localhost','root','123456');
 
 	mysql_select_db('yourdaily',$link);
+	$sql = "select avatar from user where id = '$id'";
+	$result = mysql_query($sql, $link);
+	$avatarUrl = "";
 
+	while ($row = mysql_fetch_array($result)) {
+		$avatarUrl = $row[avatar];
+	}
 
 	if($_FILES[avatar]["error"] > 0) {
 		$msg = array('status' => 400, 'info' => '');
 		echo json_encode($msg);
 	}else {
+		// 删除原来的文件
+		if($avatarUrl != "") {
+			$tempFileName = explode("/", $avatarUrl);
+			unlink('D:/AppServ/www/yourdaily/useravatar/'. $tempFileName[3]);
+		}
 		// 将文件的格式后缀删除
-		$actualFileName = explode('.', $_FILES[avatar]['name'])[0];
+		$fileSavePath = "D:/AppServ/www/yourdaily/useravatar/" . $id . time() . "-avatar.jpg";
 		// 写入文件
-		move_uploaded_file($_FILES[avatar]['tmp_name'], "../../userAvatar/" . $id . $actualFileName . "-avatar.jpg");
+		move_uploaded_file($_FILES[avatar]['tmp_name'], $fileSavePath);
 
 		// 整理要保存在数据库的图片路径
-		$path = "/yourdaily/userAvatar/" . $id . $actualFileName . "-avatar.jpg";
+		$savedFileName = explode("/", $fileSavePath);
+		$path = "/yourdaily/useravatar/" . $savedFileName[5];
 		$sql = "update user set avatar = '$path' where id = '$id'";
 		$result = mysql_query($sql, $link);
+		
 
-		// 删除原来的文件
-		$isDelete = unlink('../../userAvatar/'. $curAvatar);
-
-
-		if($result && $isDelete) {
+		if($result) {
 			$msg = array('status' => 200, 'info' => '');
 			echo json_encode($msg);
 		}else {
-			$msg = array('status' => 400, 'info' => '');
+			$msg = array('status' => 400, 'info' => '', 'curFile' => $curAvatar);
 			echo json_encode($msg);
 		};
 		

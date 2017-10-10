@@ -26,7 +26,7 @@
 		for ($i=0; $i < count($file); $i++) {
 			if($file['name'][$i]) {
 				$arr[] = $file['name'][$i];
-				move_uploaded_file($file['tmp_name'][$i], "../../dailyPhoto/" . $dailyId . $i . ".jpg");
+				move_uploaded_file($file['tmp_name'][$i], "D:/AppServ/www/yourdaily/dailyPhoto/" . $dailyId . $i . ".jpg");
 				array_push($filePathArr, "/yourdaily/dailyPhoto/" . $dailyId . $i . ".jpg");
 			}
 		};
@@ -39,6 +39,7 @@
 			$sql = "insert into daily(id,userId,title,content,image,mood,weather,publicTime)values ('$dailyId','$id','$title','$content','$imgPath_str','$mood','$weather','$time')";
 		}
 	}else {
+		// 如果没有文件照样依次判断是否有标题
 		if($title == '') {
 			$imgPath_str = implode(",", $filePathArr);
 			$sql = "insert into daily(id,userId,content,mood,weather,publicTime)values ('$dailyId','$id','$content','$mood','$weather','$time')";
