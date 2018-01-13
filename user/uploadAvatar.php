@@ -1,5 +1,5 @@
-<?php 
-	header('content-type:application:json;charset=utf8');  
+<?php
+	header('content-type:application:json;charset=utf8');
 	header('Access-Control-Allow-Origin:http://localhost:8080');
 	date_default_timezone_set("PRC");
 	date_default_timezone_set("Asia/Shanghai");
@@ -8,6 +8,8 @@
 	$id = $_POST[id];
 	$curAvatar = $_POST[curAvatar];
 	$file = $_FILES[avatar];
+	// 获取服务器根目录
+	$rootpath = str_replace('\\', '/', $_SERVER['DOCUMENT_ROOT']);
 
 	$link = mysql_connect('localhost','root','123456');
 
@@ -27,19 +29,19 @@
 		// 删除原来的文件
 		if($avatarUrl != "") {
 			$tempFileName = explode("/", $avatarUrl);
-			unlink('D:/AppServ/www/yourdaily/useravatar/'. $tempFileName[3]);
+			unlink($rootpath . '/yourdaily/useravatar/'. $tempFileName[3]);
 		}
 		// 将文件的格式后缀删除
-		$fileSavePath = "D:/AppServ/www/yourdaily/useravatar/" . $id . time() . "-avatar.jpg";
+		$fileSavePath = $rootpath . '/yourdaily/useravatar/' . $id . time() . '-avatar.jpg';
 		// 写入文件
 		move_uploaded_file($_FILES[avatar]['tmp_name'], $fileSavePath);
 
 		// 整理要保存在数据库的图片路径
-		$savedFileName = explode("/", $fileSavePath);
-		$path = "/yourdaily/useravatar/" . $savedFileName[5];
+		$savedFileName = explode('/', $fileSavePath);
+		$path = '/yourdaily/useravatar/' . $savedFileName[5];
 		$sql = "update user set avatar = '$path' where id = '$id'";
 		$result = mysql_query($sql, $link);
-		
+
 
 		if($result) {
 			$msg = array('status' => 200, 'info' => '');
@@ -48,6 +50,6 @@
 			$msg = array('status' => 400, 'info' => '', 'curFile' => $curAvatar);
 			echo json_encode($msg);
 		};
-		
+
 	}
 ?>

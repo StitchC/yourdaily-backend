@@ -1,10 +1,10 @@
-<?php 
-	header('content-type:application:json;charset=utf8');  
-	header('Access-Control-Allow-Origin:http://localhost:8080');  
+<?php
+	header('content-type:application:json;charset=utf8');
+	header('Access-Control-Allow-Origin:http://localhost:8080');
 
 	$account = $_GET[account];
 	$pwd = $_GET[pwd];
-
+	
 	// 请求发送的结果
 	$result_str = array();
 	// 如果查询内容不为空 info 键值数组才会有值
@@ -26,7 +26,7 @@
 		400： 请求数据有误 数据库查询结果为非
 	*/
 
-	
+
 	if(mysql_num_rows($result) === 0) {
 		$result_str = array('status'=>400, 'info'=>'');
 		echo json_encode($result_str);
