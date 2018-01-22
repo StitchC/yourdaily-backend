@@ -4,7 +4,7 @@
 
 	$account = $_GET[account];
 	$pwd = $_GET[pwd];
-	
+
 	// 请求发送的结果
 	$result_str = array();
 	// 如果查询内容不为空 info 键值数组才会有值
@@ -17,9 +17,9 @@
 
 	$sql = "select * from user where account = '$account' and password = '$pwd'";
 
+
 	$result = mysql_query($sql,$link);
 
-	// echo mysql_num_rows($result);
 	/*
 		自定义返回状态码：
 		200： 请求数据正确
@@ -32,10 +32,11 @@
 		echo json_encode($result_str);
 
 	}else {
-		while($arr = mysql_fetch_array($result)) {
-			$info = array('id'=>$arr[id], 'sex'=>$arr[sex], 'connect'=>$arr[connect]);
+		// 如果帐号匹配 找到用户的链接用户 进行数据的查询
+		while ($arr = mysql_fetch_array($result)) {
+			$result_arr = array('id' => $arr[id], 'connect' => $arr[connect], 'sex' => $arr[sex]);
 		}
-		$result_str = array('status'=>200, 'info'=>$info);
+		$result_str = array('status'=>200, 'info'=>$result_arr);
 		echo json_encode($result_str);
 	}
 
