@@ -3,6 +3,7 @@
   header('Access-Control-Allow-Origin:http://localhost:8080');
 
   $id = $_GET[id];
+  $connect = $_GET[id];
 
 
   $total_words = 0;
@@ -22,7 +23,13 @@
   // 查询日记结果sql 语句
   // 获取全部日记
 
-	$all_daily_sql = "select daily.id,daily.userid,title,content,image,mood, weather,publictime,user.sex from daily, user where daily.userid = user.id and daily.userid = '$id' order by daily.publictime desc";
+  // 获取全部日记
+	if($connect) {
+		$all_daily_sql = "select daily.id,daily.userid,title,content,image,mood, weather,publictime,user.sex from daily join user on daily.userid = user.id where daily.userid = '$id' or daily.userid = '$connect' order by daily.publictime desc";
+	}else {
+		$all_daily_sql = "select daily.id,daily.userid,title,content,image,mood, weather,publictime,user.sex from daily join user on daily.userid = user.id where daily.userid = '$id' order by daily.publictime desc";
+	}
+
 
 
 
