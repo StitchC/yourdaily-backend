@@ -5,6 +5,8 @@ const STATUSCODE = require('../module/base/statusCode')
 const getUserData = require('../module/getUserData')
 const getUserInfo = require('../module/getUserInfo')
 const modifyUserSex = require('../module/modifySex')
+const modifyUserMotto = require('../module/modifyMotto')
+const modifyUserName = require('../module/modifyUserName')
 
 /* 获取用户全部数据 */
 router.get('/getUserData', (req, res) => {
@@ -22,10 +24,10 @@ router.get('/getUserInfo', (req, res) =>{
             status: STATUSCODE.SUCCESS,
             info: result
         })
-    }).catch(() => {
+    }).catch((err) => {
         res.send({
             status: STATUSCODE.FAIL,
-            info: ''
+            info: err
         })
     })
 })
@@ -34,21 +36,53 @@ router.get('/getUserInfo', (req, res) =>{
 
 /* 修改用户性别 */
 router.post('/modifySex', (req, res) => {
-    console.log(req.query)
     modifyUserSex.modifySex(req.query).then((result) => {
-        if(result) {
-            res.send({
-                status: STATUSCODE.SUCCESS,
-                info: ''
-            })
-        }else {
-            res.send({
-                status: STATUSCODE.FAIL,
-                info: ''
-            })
-        }
+        res.send({
+            status: STATUSCODE.SUCCESS,
+            info: ''
+        })
+    }).catch((err) => {
+        res.send({
+            status: STATUSCODE.FAIL,
+            info: err
+        })
     })
 })
+
+
+
+/* 修改用户格言 */
+router.post('/modifyMotto', (req, res) => {
+    modifyUserMotto.doModifyUserMotto(req.query).then((result) => {
+        res.send({
+            status: STATUSCODE.SUCCESS,
+            info: ''
+        })
+    }).catch((err) => {
+        res.send({
+            status: STATUSCODE.FAIL,
+            info: err
+        })
+    })
+})
+
+
+
+/* 修改用户昵称 */
+router.post('/modifyUserName', (req, res) => {
+    modifyUserName.doModifyUserName(req.query).then((result) => {
+        res.send({
+            status: STATUSCODE.SUCCESS,
+            info: ''
+        })
+    }).catch((err) => {
+        res.send({
+            status: STATUSCODE.FAIL,
+            info: err
+        })
+    })
+})
+
 
 
 
