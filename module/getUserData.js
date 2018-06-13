@@ -53,11 +53,13 @@ let totalDailyImages = function(dailys) {
     let images = []
 
     dailys.forEach(daily => {
-        if(daily.images !== '') {
+        
+        if(daily.image !== '') {
+            
             images = images.concat(daily.image.split(','))
         }
     })
-
+   
     return images
 }
 

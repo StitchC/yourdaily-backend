@@ -72,9 +72,6 @@ async function outputUserInfo(userId) {
     userData = userData[0]
 
     let dailyDetail = fetchDailyDetailData(dailyInfo)
-    
-    console.log(Object.assign(userData, dailyDetail))
-    
 
     return Object.assign(userData, dailyDetail)
 }

@@ -17,7 +17,12 @@ app.use(cookieParser())
 app.use(bodyParser({
     keepExtensions: true
 }))
-app.use(express.static(path.join(__dirname, 'public')))
+
+app.use('/static', express.static(path.join(__dirname, 'public/static')))
+
+app.use('/yourdaily/user/userAvatar', express.static(path.join(__dirname, '/public/userAvatar')))
+
+app.use('/yourdaily/user/userDailyImg', express.static(path.join(__dirname, '/public/userDailyImg')))
 
 
 app.use('/yourdaily', indexRouter)

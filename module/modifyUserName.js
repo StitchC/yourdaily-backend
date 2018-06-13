@@ -6,6 +6,7 @@ let updateUserName = function(userInfo) {
     return new Promise((resolve, reject) => {
         db.query(sql, (err, result) => {
             if(err) {
+                console.log(err)
                 reject(err)
             }
 
